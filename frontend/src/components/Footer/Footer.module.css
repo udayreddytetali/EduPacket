@@ -1,0 +1,189 @@
+.main-footer {
+  background: #f6f9ff;
+  border-top: 1px solid #e3e3e3;
+  padding-top: 0.5rem;
+  font-family: Arial, sans-serif;
+  width: 100%;
+  height: 35vh;
+  background-color: white;
+}
+
+.footer-top {
+  padding-left: 2rem;
+  font-family: Arial, sans-serif;
+  padding-bottom: 0.5rem;
+  color: #205761;
+}
+
+.footer-links-row {
+  width: 50%;
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding-left: 0.5rem;
+  background-color: white;
+  padding-left: 1rem;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 0.7rem 1.4rem;   
+  text-decoration: none;
+  color: #205761;
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: box-shadow 0.2s, background 0.2s;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  border: none;
+}
+
+.footer-link:hover {
+  background: #e3f2fd;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #205761;
+  border-radius: 5px;
+}
+
+button.footer-link {
+  flex-direction: row;  
+  background: transparent;
+  border: none;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+/* Footer section button styles */
+.footer-link {
+  color: #888;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0 8px 0;
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Active state for section buttons only */
+.sectionActive {
+  color: #1976d2;
+  font-weight: bold;
+  border-top: 2.5px solid #1976d2;
+  background: linear-gradient(to bottom, #e3f2fd 60%, transparent 100%);
+  box-shadow: 0 -2px 8px 0 rgba(25, 118, 210, 0.08);
+  z-index: 2;
+}
+
+/* Notification link styles (not highlighted like section buttons) */
+.notification-link {
+  color: #888;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px 0;
+  display: block;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding-left: 1rem;
+}
+.notification-preview{
+    padding-top: 0.5rem;
+    border-top: 1px solid #000000;
+}
+/* If you want a hover effect for notification links */
+.notification-link:hover {
+  color: #1976d2;
+  text-decoration: underline;
+}
+
+.activeNotification {
+  font-weight: 700;
+  color: #21605a;
+  border-bottom: 1px solid #21605a !important;
+}
+
+.view-more-btn {
+  align-self: flex-start;
+  background-color: #21605a;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+}
+
+.view-more-btn:hover {
+  background-color: #1a4c46;
+}
+
+.arrow {
+  font-size: 1.3rem;
+  line-height: 0;
+  margin-left: 0.6rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #206454;
+  opacity: 0.9;
+  margin-top: 1rem;
+}
+
+/* Responsive */
+
+@media (max-width: 720px) {
+  .footer-links-row {
+    gap: 1.1rem;
+  }
+  .footer-link {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.9rem;
+  }
+  .notification-preview {
+    max-width: 95vw;
+    padding: 1rem 1rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .main-footer {
+    padding: 1rem 0 0.6rem 0;
+  }
+  .footer-links-row {
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .footer-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+    min-width: 75px;
+  }
+  .view-more-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .footer-bottom {
+    margin-top: 0;
+  }
+}

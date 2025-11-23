@@ -1,0 +1,119 @@
+/* Eye icon button for show/hide password */
+.eyeButton {
+  position: absolute;
+  right: 0.75rem;
+  top: 35%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: #205761;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  width: 24px;
+  height: 24px;
+  user-select: none;
+  z-index: 10;
+}
+.eyeButton:hover {
+  opacity: 1;
+}
+
+.authContainer {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 2.5rem 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #3c3c3c;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 2rem;
+  text-align: center;
+  color: #21605a;
+}
+.label {
+  position: relative;
+  display: block;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.6rem;
+}
+.input,
+.select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-size: 1rem;
+  font-weight: 400;
+  border: 1.8px solid #ccc;
+  border-radius: 6px;
+  outline-offset: 3px;
+  transition: border-color 0.25s ease;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+  padding-right: 2.5rem; /* space for eyeButton in password input */
+}
+.input:focus,
+.select:focus {
+  border-color: #21605a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(33, 96, 90, 0.5);
+}
+.button {
+  margin-top: 0.4rem;
+  background-color: #21605a;
+  color: white;
+  padding: 0.9rem 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 8px rgba(33, 96, 90, 0.3);
+}
+.button:hover {
+  background-color: #1a4c46;
+}
+.backButton {
+  margin-top: 1.8rem;
+  display: block;
+  text-align: center;
+  font-size: 1rem;
+  color: #21605a;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  background: none;
+  padding: 0;
+  width: 100%;
+}
+.backButton:hover {
+  color: #1a4c46;
+}
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .authContainer {
+    margin: 2rem 1rem;
+    padding: 2rem 1.5rem;
+  }
+  .title {
+    font-size: 1.7rem;
+  }
+  .button,
+  .backButton {
+    font-size: 1rem;
+  }
+}

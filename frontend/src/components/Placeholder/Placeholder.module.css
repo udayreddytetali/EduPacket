@@ -1,0 +1,21 @@
+.placeholderContainer {
+  height: 55vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.backButton {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.backButton:hover {
+  background: #0056b3;
+}

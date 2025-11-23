@@ -1,0 +1,58 @@
+/* Mobile styles for Restore Deleted, Examination, Circulars, Jobs sections */
+
+@media (max-width: 600px) {
+  .restore-deleted-container,
+  .deleted-pdf-container,
+  .deleted-subject-container,
+  .notification-list-container {
+    width: 98vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 8px 2vw !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    overflow-x: auto !important;
+  }
+
+  .restore-deleted-table,
+  .deleted-pdf-table,
+  .deleted-subject-table,
+  .notification-list-table {
+    font-size: 14px !important;
+    width: 100% !important;
+    min-width: 320px !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+
+  .restore-deleted-table th,
+  .restore-deleted-table td,
+  .deleted-pdf-table th,
+  .deleted-pdf-table td,
+  .deleted-subject-table th,
+  .deleted-subject-table td,
+  .notification-list-table th,
+  .notification-list-table td {
+    padding: 6px 4px !important;
+    font-size: 13px !important;
+    word-break: break-word !important;
+  }
+
+  .restore-btn,
+  .delete-btn {
+    font-size: 13px !important;
+    padding: 6px 10px !important;
+    min-width: 60px !important;
+  }
+
+  .notification-list-heading {
+    font-size: 18px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .notification-list-pagination {
+    font-size: 14px !important;
+    gap: 6px !important;
+  }
+}

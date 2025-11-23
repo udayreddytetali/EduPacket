@@ -1,0 +1,51 @@
+.yearSelection {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.yearSelection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.yearSelection li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #374a59;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+.yearSelection li:hover {
+  background-color: #e3f2fd;
+}
+
+.selected {
+  background-color: #e3f2fd;
+  font-weight: bold;
+  color: #3f51b5 !important; /* Forces text color for selected */
+}
+
+/* Icon color for selected year */
+.selected i {
+  color: #3f51b5;
+}
+
+/* Responsive styles */
+@media (max-width: 500px) {
+  .handPointIcon {
+    display: none; /* Hides the hand point icon */
+  }
+  .yearSelection li {
+    font-size: 1.4rem;
+  }
+}

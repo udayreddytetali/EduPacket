@@ -1,0 +1,94 @@
+@media (max-width: 500px) {
+  .add-subject-btn {
+    margin-right: 0.5rem !important;
+    font-size: 12px !important;
+  }
+  .remove-subject-btn {
+    font-size: 12px !important;
+}}
+/* SubjectSelection.css */
+.subject-selection-container {
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 500px) {
+  .subject-selection-container {
+    min-height: 320px;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+  }
+}
+
+.subject-selection-container h3 {
+  margin-top: 0;
+  color: #3f51b5;
+  margin-bottom: 1rem;
+}
+
+.subject-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.subject-list > li {
+  border-bottom: 1px solid #eee;
+}
+
+.subject-header {
+  font-weight: 600;
+  color: #3f51b5;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subject-header:hover {
+  background-color: #e3f2fd;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  font-weight: bold;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.arrow.expanded {
+  transform: rotate(90deg);
+}
+
+.file-list {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0 0 0;
+  background-color: #f9fbff;
+  border-left: 2px solid #3f51b5;
+}
+
+.file-list li {
+  padding: 0.25rem 0;
+}
+
+.file-list a {
+  text-decoration: none;
+  color: #1e3264;
+}
+
+.file-list a:hover {
+  text-decoration: underline;
+  color: #3564d4;
+}
