@@ -57,7 +57,7 @@ function AppContent() {
           element={
             <AdminRoute>
               <>
-                <AdminDashboard />
+                <AdminDashboard showPendingOnly={true} />
                 <MainComponent />
               </>
             </AdminRoute>

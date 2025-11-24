@@ -83,7 +83,7 @@ function AdminDashboard({ showPendingOnly = false }) {
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
       {showPendingOnly && pending.length === 0 && !loading && (
-        <p style={{ textAlign: "center", color: "#888" }}>No pending users.</p>
+        <p style={{ textAlign: "center", color: "#888" }}>There are no pending users.</p>
       )}
 
       {showPendingOnly && pending.length > 0 && (
