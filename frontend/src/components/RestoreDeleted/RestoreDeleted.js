@@ -12,7 +12,7 @@ const RestoreDeleted = () => {
   if (!user) return <div>Access denied.</div>;
 
   return (
-    <div style={{ maxWidth: "100%", margin: '0', background: '#fff', boxShadow: '0 4px 24px rgba(0,0,0,0.08)',height:"55vh", overflowY:"auto"}}>
+    <div style={{ width: '100%', maxWidth: '100%', margin: '20px', padding: '24px 24px 0px', background: '#fff', borderRadius: '12px', boxShadow: 'rgba(0, 0, 0, 0.07) 0px 2px 12px', height: '55vh', overflowY: 'auto' }}>
       <h2 style={{ textAlign: 'center', color: '#205761', fontWeight: 700, letterSpacing: 1, paddingTop: 10,paddingBottom:10 }}>Restore Deleted Data</h2>
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
         <button
