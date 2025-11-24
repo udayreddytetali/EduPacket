@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Auth.module.css';
 
-const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-useEffect(() => {
-  console.log("API BASE =", process.env.REACT_APP_API_BASE);
-}, []);
-
+const strongPasswordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const isValidEmail = (email) =>
   email.toLowerCase().includes('gmail.com');
-
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -22,6 +18,11 @@ const Signup = () => {
   const [isStrong, setIsStrong] = useState(null);
   const [signupMsg, setSignupMsg] = useState('');
   const [signupSuccess, setSignupSuccess] = useState(false);
+
+  // ✅ FIXED → useEffect must be inside component + imported
+  useEffect(() => {
+    console.log("API BASE =", process.env.REACT_APP_API_BASE);
+  }, []);
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
@@ -46,9 +47,10 @@ const Signup = () => {
         name,
         email,
         password,
-        role
+        role,
       });
       setSignupSuccess(true);
+
       if (role === 'student') {
         setSignupMsg('Signup successful! You can now log in.');
       } else {
@@ -63,41 +65,48 @@ const Signup = () => {
   return (
     <div className={styles.authContainer}>
       {signupMsg ? (
-        <div style={{
-          background: signupSuccess ? '#e3fbe3' : '#ffe3e3',
-          color: signupSuccess ? '#205761' : '#b00020',
-          border: `1.5px solid ${signupSuccess ? '#7ed957' : '#b00020'}`,
-          borderRadius: '6px',
-          padding: '1.2rem',
-          marginBottom: '1.5rem',
-          textAlign: 'center',
-          fontWeight: 500
-        }}>{signupMsg}</div>
+        <div
+          style={{
+            background: signupSuccess ? '#e3fbe3' : '#ffe3e3',
+            color: signupSuccess ? '#205761' : '#b00020',
+            border: `1.5px solid ${signupSuccess ? '#7ed957' : '#b00020'}`,
+            borderRadius: '6px',
+            padding: '1.2rem',
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            fontWeight: 500,
+          }}
+        >
+          {signupMsg}
+        </div>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
           <h2 className={styles.title}>Sign Up for EduPacket</h2>
+
           <label className={styles.label}>
             Full Name
             <input
               type="text"
               className={styles.input}
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               required
               placeholder="Your full name"
             />
           </label>
+
           <label className={styles.label}>
             Email
             <input
               type="email"
               className={styles.input}
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="you@example.com"
             />
           </label>
+
           <label className={styles.label}>
             Password
             <div style={{ position: 'relative' }}>
@@ -118,42 +127,79 @@ const Signup = () => {
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? (
-                  // Eye open SVG
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#205761" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-                    <circle cx="12" cy="12" r="3"/>
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#205761"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                    <circle cx="12" cy="12" r="3" />
                   </svg>
                 ) : (
-                  // Eye closed SVG
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#205761" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                    <line x1="3" y1="3" x2="21" y2="21" stroke="#205761" strokeWidth="2"/>
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#205761"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+                    <circle cx="12" cy="12" r="3" />
+                    <line
+                      x1="3"
+                      y1="3"
+                      x2="21"
+                      y2="21"
+                      stroke="#205761"
+                      strokeWidth="2"
+                    />
                   </svg>
                 )}
               </button>
             </div>
+
             {password.length > 0 && (
-              <div style={{ fontSize: '0.9em', marginTop: '0.2em', color: isStrong ? 'green' : 'red' }}>
-                {isStrong ? 'Strong password.' : 'Must be 8+ chars, include upper & lower case, number, and special char.'}
+              <div
+                style={{
+                  fontSize: '0.9em',
+                  marginTop: '0.2em',
+                  color: isStrong ? 'green' : 'red',
+                }}
+              >
+                {isStrong
+                  ? 'Strong password.'
+                  : 'Must be 8+ chars, include upper & lower case, number, and special char.'}
               </div>
             )}
           </label>
+
           <label className={styles.label}>
             Role
             <select
               className={styles.select}
               value={role}
-              onChange={e => setRole(e.target.value)}
+              onChange={(e) => setRole(e.target.value)}
             >
               <option value="student">Student</option>
               <option value="teacher">Teacher</option>
               <option value="cr">Class Representative (CR)</option>
             </select>
           </label>
-          <button type="submit" className={styles.button}>Sign Up</button>
+
+          <button type="submit" className={styles.button}>
+            Sign Up
+          </button>
         </form>
       )}
+
       <Link to="/1st-Year/1st-Sem" className={styles.backButton}>
         Back to Main
       </Link>
