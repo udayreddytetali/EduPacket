@@ -5,7 +5,13 @@ const logger = require('../logger');
 
 const signup = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    let { name, email, password, role } = req.body;
+    // Basic validation
+    if (!email || !password || !name || !role) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    // Normalize email
+    email = String(email).trim().toLowerCase();
 
     // Validate role
     if (!['teacher', 'student', 'cr'].includes(role)) {
@@ -44,7 +50,9 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
+    email = String(email).trim().toLowerCase();
 
     // Find user
     const user = await User.findOne({ email });
