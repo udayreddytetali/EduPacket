@@ -40,8 +40,8 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <img src={`${process.env.PUBLIC_URL}/website-logo.jpg`} alt="Website Logo" height="45px" />
-        <h3>EduPacket</h3>
+        <img src={`${process.env.PUBLIC_URL}/website-logo.jpg`} alt="edupacket logo" height="45px" />
+        <h3>edupacket</h3>
       </div>
       <img src={`${process.env.PUBLIC_URL}/adityalogo.svg`} alt="Aditya Logo" style={{ height: '50px' }} className="aditya-logo" />
       {/* Only show auth-buttons if not logged in */}

@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# edupacket — Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Live demo: https://edu-packet.vercel.app/1st-Year/1st-Sem
 
-## Available Scripts
+This is the frontend for the `edupacket` project — a lightweight student resource portal that hosts model papers, notes, circulars, and job/exam notifications.
 
-In the project directory, you can run:
+Technologies used (frontend):
+- React (Create React App)
+- React Router for client routing
+- Context API for auth state management
+- Axios for API requests
+- CSS modules and component-level styles
 
-### `npm start`
+How the frontend is useful to students:
+- Browse subjects by year/semester and download model papers and notes.
+- Teachers, admins and class representatives can upload and manage PDFs.
+- Notifications, circulars and job posts are surfaced in the footer area for quick access.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Local development
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Install dependencies:
 
-### `npm test`
+```powershell
+cd frontend
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Run dev server:
 
-### `npm run build`
+```powershell
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Build for production:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```powershell
+npm run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Deployment notes
+- The frontend is intended to be deployed to Vercel (or another static host). Set `REACT_APP_API_URL` in your Vercel project to the backend URL (for example `https://edupacket-backend.onrender.com`) and redeploy so the built app points to the correct API.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
+If you'd like, update this file with any additional frontend-specific instructions or screenshots.
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
