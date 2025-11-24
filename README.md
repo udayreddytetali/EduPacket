@@ -1,4 +1,4 @@
-# edupacket
+# Edupacket
 
 EduPacket is a student-focused resource portal that hosts model papers, notes, circulars, and job/exam notifications. This repository contains a React frontend and a Node.js + Express backend with MongoDB for data storage.
 

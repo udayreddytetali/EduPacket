@@ -147,7 +147,7 @@ const Footer = () => {
         </button>
       </div>
 
-      <div className={styles["footer-bottom"]}>© 2025 edupacket. All rights reserved.</div>
+      <div className={styles["footer-bottom"]}>© 2025 Edupacket. All rights reserved.</div>
     </footer>
   );
 };

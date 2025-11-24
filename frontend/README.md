@@ -1,8 +1,8 @@
-# edupacket — Frontend
+# Edupacket — Frontend
 
 Live demo: https://edu-packet.vercel.app/1st-Year/1st-Sem
 
-This is the frontend for the `edupacket` project — a lightweight student resource portal that hosts model papers, notes, circulars, and job/exam notifications.
+This is the frontend for the `Edupacket` project — a lightweight student resource portal that hosts model papers, notes, circulars, and job/exam notifications.
 
 Technologies used (frontend):
 - React (Create React App)

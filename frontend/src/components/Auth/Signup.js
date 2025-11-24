@@ -82,7 +82,7 @@ const Signup = () => {
         </div>
       ) : (
         <form className={styles.form} onSubmit={handleSubmit}>
-          <h2 className={styles.title}>Sign Up for edupacket</h2>
+          <h2 className={styles.title}>Sign Up for Edupacket</h2>
 
           <label className={styles.label}>
             Full Name
