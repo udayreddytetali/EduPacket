@@ -15,27 +15,43 @@ function AdminDashboard({ showPendingOnly = false }) {
   useEffect(() => {
     if (!token) return;
 
+    let isMounted = true;
+
     // Only fetch pending users if showPendingOnly is true (for /admin/requests)
     if (showPendingOnly && user.role !== "admin") return;
 
+    const url = showPendingOnly ? `/api/admin/pending-users` : null;
+
+    // Only enter loading state if we'll actually fetch
+    if (!url) {
+      // ensure we are not left in a loading state
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
     setError(null);
-
-    const url = showPendingOnly ? `/api/admin/pending-users` : null;
 
     if (url) {
       axios
         .get(url)
         .then((resp) => {
           console.log("ADMIN API RESPONSE =", resp.data);
-          setPending(resp.data);
+          if (isMounted) setPending(resp.data);
         })
         .catch((err) => {
           console.log("ADMIN API ERROR =", err.response?.data || err.message);
-          setError("Failed to fetch pending users");
+          if (isMounted) setError("Failed to fetch pending users");
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          if (isMounted) setLoading(false);
+        });
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [token, showPendingOnly, user]);
 
   const handleAction = (userId, action) => {
