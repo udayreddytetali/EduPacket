@@ -37,10 +37,11 @@ const Footer = () => {
   useEffect(() => {
     async function fetchAll() {
       try {
+        const API_BASE = process.env.REACT_APP_API_URL || (window && window.REACT_APP_API_URL) || '';
         const [examRes, circRes, jobsRes] = await Promise.all([
-          fetch('/api/examination'),
-          fetch('/api/circulars'),
-          fetch('/api/jobs'),
+          fetch(`${API_BASE}/api/examination`),
+          fetch(`${API_BASE}/api/circulars`),
+          fetch(`${API_BASE}/api/jobs`),
         ]);
         const [examData, circData, jobsData] = await Promise.all([
           examRes.json(),

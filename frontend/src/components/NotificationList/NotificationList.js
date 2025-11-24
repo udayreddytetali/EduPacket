@@ -30,7 +30,8 @@ function NotificationList({ category }) {
   useEffect(() => {
     async function fetchNotifications() {
       try {
-        const res = await fetch(`/api/${category}`);
+        const API_BASE = process.env.REACT_APP_API_URL || (window && window.REACT_APP_API_URL) || '';
+        const res = await fetch(`${API_BASE}/api/${category}`);
         if (res.status === 401) {
           logout();
           return;
