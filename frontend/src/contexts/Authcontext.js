@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { axios } from '../api';
 
 export const AuthContext = createContext();
 
@@ -13,6 +14,10 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem('user');
     if (savedToken) setToken(savedToken);
     if (savedUser) setUser(JSON.parse(savedUser));
+    // If we have a token, set axios default Authorization header
+    if (savedToken) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+    }
     setLoading(false);
   }, []);
 
@@ -21,6 +26,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(user));
     setToken(token);
     setUser(user);
+    // Set axios default Authorization header for subsequent requests
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   };
 
   const logout = () => {
@@ -28,6 +35,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setToken(null);
     setUser(null);
+    // Remove axios default Authorization header
+    delete axios.defaults.headers.common['Authorization'];
   };
 
   if (loading) {
