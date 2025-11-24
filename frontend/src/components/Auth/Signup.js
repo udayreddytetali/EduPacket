@@ -4,6 +4,10 @@ import axios from 'axios';
 import styles from './Auth.module.css';
 
 const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+useEffect(() => {
+  console.log("API BASE =", process.env.REACT_APP_API_BASE);
+}, []);
+
 
 const isValidEmail = (email) =>
   email.toLowerCase().includes('gmail.com');
