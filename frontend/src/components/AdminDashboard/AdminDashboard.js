@@ -76,6 +76,15 @@ function AdminDashboard({ showPendingOnly = false }) {
         </h2>
       )}
 
+      {showPendingOnly && (
+        <div style={{ margin: '12px auto', maxWidth: 900, padding: 12, background: '#fff8', borderRadius: 8 }}>
+          <strong style={{ display: 'block', marginBottom: 6 }}>Debug (pending users):</strong>
+          <div style={{ fontSize: 13, color: '#333' }}>loading: {String(loading)}</div>
+          <div style={{ fontSize: 13, color: '#333' }}>count: {pending?.length ?? 0}</div>
+          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: 12, marginTop: 8, background: '#f7f7f7', padding: 8, borderRadius: 6 }}> {JSON.stringify(pending, null, 2)}</pre>
+        </div>
+      )}
+
       {loading && <p style={{ textAlign: "center", color: "#205761" }}>Loading...</p>}
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
