@@ -3,15 +3,17 @@ const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/authMiddleware');
 const parser = require('../upload');
 const Pdf = require('../models/Pdf');
+const logger = require('../logger');
+
 
 // Bulk delete all PDFs and model papers (admin only)
 router.delete('/all', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const result = await Pdf.deleteMany({});
     res.json({ message: 'All PDFs and model papers deleted', deletedCount: result.deletedCount });
-  } catch (err) {
-    console.error('[PDF BULK DELETE] ERROR:', err);
-    res.status(500).json({ message: 'Server error' });
+    } catch (err) {
+      logger.error('[PDF BULK DELETE] ERROR:', err);
+      res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -22,9 +24,9 @@ router.delete('/subject/:classGroup', authenticateToken, authorizeRoles('admin')
     if (!classGroup) return res.status(400).json({ message: 'classGroup param required' });
     const result = await Pdf.deleteMany({ classGroup });
     res.json({ message: `All PDFs/model papers for subject '${classGroup}' deleted`, deletedCount: result.deletedCount });
-  } catch (err) {
-    console.error('[PDF SUBJECT DELETE] ERROR:', err);
-    res.status(500).json({ message: 'Server error' });
+    } catch (err) {
+      logger.error('[PDF SUBJECT DELETE] ERROR:', err);
+      res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -33,21 +35,21 @@ router.post(
   '/upload',
   authenticateToken,
   (req, res, next) => {
-    console.log('[PDF UPLOAD] Middleware: req.user:', req.user);
+      logger.debug('[PDF UPLOAD] Middleware: req.user:', req.user);
     if (!['admin', 'teacher', 'cr'].includes(req.user.role)) {
-      console.log('[PDF UPLOAD] REJECTED: role is', req.user.role);
+        logger.debug('[PDF UPLOAD] REJECTED: role is', req.user.role);
       return res.status(403).json({ message: 'Access denied: insufficient role (middleware)' });
     }
-    console.log('[PDF UPLOAD] PASSED: role is', req.user.role);
+      logger.debug('[PDF UPLOAD] PASSED: role is', req.user.role);
     next();
   },
   parser.single('file'),
   async (req, res) => {
     try {
-      console.log('[PDF UPLOAD] Handler: req.user:', req.user);
-      console.log('[PDF UPLOAD] req.file:', req.file);
+        logger.debug('[PDF UPLOAD] Handler: req.user:', req.user);
+        logger.debug('[PDF UPLOAD] req.file:', req.file);
       if (!req.file) {
-        console.error('[PDF UPLOAD] No file uploaded. req.body:', req.body);
+          logger.error('[PDF UPLOAD] No file uploaded. req.body:', req.body);
         return res.status(400).json({ message: 'No file uploaded', body: req.body });
       }
       const { title, classGroup, year, semester } = req.body;
@@ -55,15 +57,15 @@ router.post(
         return res.status(400).json({ message: 'Year and semester are required.' });
       }
       // Optionally, validate year/semester values here (e.g., against allowed list)
-      console.log('[PDF UPLOAD] Uploaded file mimetype:', req.file.mimetype);
-      console.log('[PDF UPLOAD] Uploaded file originalname:', req.file.originalname);
+        logger.debug('[PDF UPLOAD] Uploaded file mimetype:', req.file.mimetype);
+        logger.debug('[PDF UPLOAD] Uploaded file originalname:', req.file.originalname);
       if (req.file.originalname) {
         const ext = req.file.originalname.split('.').pop();
-        console.log('[PDF UPLOAD] Uploaded file extension:', ext);
+          logger.debug('[PDF UPLOAD] Uploaded file extension:', ext);
       }
       // Use Cloudinary URL for file
       const fileUrl = req.file.secure_url || req.file.url || req.file.path;
-      console.log('[PDF UPLOAD] Cloudinary fileUrl:', fileUrl);
+        logger.debug('[PDF UPLOAD] Cloudinary fileUrl:', fileUrl);
       const newPdf = new Pdf({
         title,
         fileUrl,
@@ -77,7 +79,7 @@ router.post(
       await newPdf.save();
       res.status(201).json({ message: 'File uploaded successfully', pdf: newPdf });
     } catch (err) {
-      console.error('[PDF UPLOAD] ERROR:', err);
+        logger.error('[PDF UPLOAD] ERROR:', err);
       if (err.message) {
         res.status(500).json({ message: err.message });
       } else {
@@ -110,7 +112,7 @@ router.put(
 
       res.json({ message: 'PDF updated successfully', pdf });
     } catch (err) {
-      console.error(err);
+        logger.error(err);
       res.status(500).json({ message: 'Server error' });
     }
   }
@@ -119,7 +121,7 @@ router.put(
 // Fetch PDFs by classGroup, year, semester (for download/display)
 // This route is already public. No authentication required for GET /api/pdfs
 router.get('/', async (req, res) => {
-  console.log('[GET /api/pdfs] Request headers:', req.headers);
+  logger.debug('[GET /api/pdfs] Request headers:', req.headers);
   const { classGroup, year, semester } = req.query;
   let filter = { deleted: false };
   if (classGroup) filter.classGroup = classGroup;
@@ -142,7 +144,7 @@ router.get('/', async (req, res) => {
     }));
     res.json(downloadList);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -153,7 +155,7 @@ router.get('/deleted', authenticateToken, authorizeRoles('admin', 'teacher'), as
     const deletedPdfs = await Pdf.find({ deleted: true });
     res.json(deletedPdfs);
   } catch (err) {
-    console.error(err);
+      logger.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -175,7 +177,7 @@ router.delete('/:id', authenticateToken, authorizeRoles('admin', 'teacher'), asy
     await pdf.save();
     res.json({ message: 'PDF soft deleted' });
   } catch (err) {
-    console.error(err);
+      logger.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -192,17 +194,17 @@ router.post('/:id/restore', authenticateToken, authorizeRoles('admin', 'teacher'
     await pdf.save();
     res.json({ message: 'PDF restored' });
   } catch (err) {
-    console.error(err);
+      logger.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-module.exports = router;
+// (router exported at end of file)
 
 // ADMIN: Clean up legacy PDFs missing year/semester or with invalid values
 // Usage: POST /api/pdfs/cleanup-legacy (admin only)
 router.post('/cleanup-legacy', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-  console.log('[CLEANUP-LEGACY] Route hit');
+  logger.debug('[CLEANUP-LEGACY] Route hit');
   try {
     // Define allowed years and semesters
     const allowedYears = ['1', '2', '3'];
@@ -216,7 +218,7 @@ router.post('/cleanup-legacy', authenticateToken, authorizeRoles('admin'), async
         { semester: { $nin: allowedSemesters } }
       ]
     });
-    console.log(`[CLEANUP-LEGACY] Found ${legacyPdfs.length} legacy PDFs`);
+    logger.debug(`[CLEANUP-LEGACY] Found ${legacyPdfs.length} legacy PDFs`);
     let deletedCount = 0;
     for (const pdf of legacyPdfs) {
       if (!pdf.deleted) {
@@ -226,13 +228,15 @@ router.post('/cleanup-legacy', authenticateToken, authorizeRoles('admin'), async
           { strict: false }
         );
         deletedCount++;
-        console.log(`[CLEANUP-LEGACY] Soft deleted PDF _id=${pdf._id}`);
+        logger.debug(`[CLEANUP-LEGACY] Soft deleted PDF _id=${pdf._id}`);
       }
     }
-    console.log(`[CLEANUP-LEGACY] Soft deleted ${deletedCount} PDFs`);
+    logger.debug(`[CLEANUP-LEGACY] Soft deleted ${deletedCount} PDFs`);
     res.json({ message: 'Legacy PDFs cleaned up', affected: legacyPdfs.length, softDeleted: deletedCount });
   } catch (err) {
-    console.error('[PDF CLEANUP LEGACY] ERROR:', err);
+    logger.error('[PDF CLEANUP LEGACY] ERROR:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+module.exports = router;

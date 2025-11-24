@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { debug } from '../../utils/logger';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Auth.module.css';
@@ -21,7 +22,7 @@ const Signup = () => {
 
   // ✅ FIXED → useEffect must be inside component + imported
   useEffect(() => {
-    console.log("API BASE =", process.env.REACT_APP_API_BASE);
+    debug("API BASE =", process.env.REACT_APP_API_BASE);
   }, []);
 
   const handlePasswordChange = (e) => {

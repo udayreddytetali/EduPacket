@@ -2,7 +2,7 @@
       import React, { useState, useEffect, useContext, useCallback } from 'react';
       import { AuthContext } from '../../contexts/Authcontext';
       import './SubjectSelection.css';
-      console.log('[SubjectSelection.js] Loaded');
+      import { debug, error, warn } from '../../utils/logger';
       // Only keep the final export default at the end
 
       const SubjectSelection = ({ group, dataType, year, semester }) => {
@@ -14,9 +14,9 @@
         const handleRemoveSubjectConfirm = async (e) => {
           e.preventDefault();
           setSubjectError(null);
-          console.log('[Remove Subject] Stage 1: Form submitted');
+          devLog('[Remove Subject] Stage 1: Form submitted');
           if (!removeSubjectName) {
-            console.log('[Remove Subject] Stage 2: No subject selected');
+            devLog('[Remove Subject] Stage 2: No subject selected');
             return;
           }
           setLoading(true);
@@ -92,7 +92,7 @@
         }
 
         useEffect(() => {
-          console.log('[SubjectSelection] useEffect', { group, normalizedDataType, year, semester, token });
+          debug('[SubjectSelection] useEffect', { group, normalizedDataType, year, semester, token });
           if (group && normalizedDataType && year && semester) {
             setLoading(true);
             axios.get('/api/subjects', {
@@ -103,7 +103,7 @@
               .then(res => {
                 // Defensive: ensure server returned an array
                 if (!Array.isArray(res.data)) {
-                  console.error('[SubjectSelection] Unexpected subjects response:', res.data);
+                  error('[SubjectSelection] Unexpected subjects response:', res.data);
                   setSubjectError('Unexpected response from server while fetching subjects.');
                   setSubjects([]);
                   setLoading(false);
@@ -111,12 +111,12 @@
                 }
                 // Store subjects as array of { name, _id }
                 const subjectObjs = res.data.map(s => ({ name: s.name, _id: s._id }));
-                console.log('[SubjectSelection] Subjects fetched:', subjectObjs);
+                debug('[SubjectSelection] Subjects fetched:', subjectObjs);
                 setSubjects(subjectObjs);
                 setLoading(false);
               })
               .catch(err => {
-                console.error('[SubjectSelection] Error fetching subjects:', err);
+                error('[SubjectSelection] Error fetching subjects:', err);
                 setSubjects([]);
                 setLoading(false);
               });
@@ -134,11 +134,11 @@
         const handleAddSubject = async (e) => {
           e.preventDefault();
           setSubjectError(null);
-          console.log('[DEBUG] User:', user);
-          console.log('[DEBUG] Token:', token);
-          console.log('[DEBUG] newSubject:', newSubject);
-          console.log('[DEBUG] newFile:', newFile);
-          console.log('[DEBUG] group:', group, 'normalizedDataType:', normalizedDataType);
+          debug('[DEBUG] User:', user);
+          debug('[DEBUG] Token:', token);
+          debug('[DEBUG] newSubject:', newSubject);
+          debug('[DEBUG] newFile:', newFile);
+          debug('[DEBUG] group:', group, 'normalizedDataType:', normalizedDataType);
           if (!newSubject.trim()) {
             setSubjectError('Subject name required');
             return;
@@ -153,7 +153,7 @@
             setSubjectError(null);
             setLoading(true);
             setUploading(true);
-            console.log('[Add Subject] Sending:', { name: newSubject.trim(), year, semester, group, dataType: normalizedDataType });
+            debug('[Add Subject] Sending:', { name: newSubject.trim(), year, semester, group, dataType: normalizedDataType });
             const subjectRes = await axios.post('/api/subjects', {
               name: newSubject.trim(),
               year,
@@ -164,7 +164,7 @@
               headers: { Authorization: `Bearer ${token}` },
               withCredentials: true
             });
-            console.log('[Add Subject] Success:', subjectRes.data);
+            debug('[Add Subject] Success:', subjectRes.data);
             // Upload file for subject
             const formData = new FormData();
             formData.append('file', newFile);
@@ -172,7 +172,7 @@
             formData.append('classGroup', newSubject.trim());
             formData.append('year', year);
             formData.append('semester', semester);
-            console.log('[File Upload] Sending:', { file: newFile.name, classGroup: newSubject.trim(), year, semester, token });
+            debug('[File Upload] Sending:', { file: newFile.name, classGroup: newSubject.trim(), year, semester, token });
             try {
               const fileRes = await axios.post('/api/pdfs/upload', formData, {
                 headers: {
@@ -181,11 +181,11 @@
                 },
                 withCredentials: true
               });
-              console.log('[File Upload] Success:', fileRes.data);
+              debug('[File Upload] Success:', fileRes.data);
             } catch (fileErr) {
-              console.error('[File Upload] Failed:', fileErr);
+              error('[File Upload] Failed:', fileErr);
               if (fileErr.response) {
-                console.error('[File Upload] Response:', fileErr.response.data);
+                error('[File Upload] Response:', fileErr.response.data);
               }
               setSubjectError('File upload failed: ' + (fileErr.response?.data?.message || fileErr.message));
               setUploading(false);
@@ -200,13 +200,13 @@
                 withCredentials: true
               });
               if (!Array.isArray(res.data)) {
-                console.error('[SubjectSelection] Unexpected response when re-fetching subjects:', res.data);
+                error('[SubjectSelection] Unexpected response when re-fetching subjects:', res.data);
               } else {
                 const subjectObjs = res.data.map(s => ({ name: s.name, _id: s._id }));
                 setSubjects(subjectObjs);
               }
             } catch (fetchErr) {
-              console.error('[Fetch Subjects] Failed:', fetchErr);
+              error('[Fetch Subjects] Failed:', fetchErr);
             }
             // Also refresh files for the new subject
             if (expandedSubject === newSubject.trim()) setExpandedSubject(null);
@@ -215,7 +215,7 @@
             setShowAddForm(false);
             setUploading(false);
           } catch (err) {
-            console.error('[Add Subject] Failed:', err);
+            error('[Add Subject] Failed:', err);
             setSubjectError('Failed to add subject: ' + (err.response?.data?.message || err.message));
           }
         setLoading(false);
@@ -379,9 +379,9 @@
       }
       // SubjectFiles component
       function SubjectFiles({ subject, group, dataType, user, token, year, semester }) {
-        console.log('[SubjectFiles] Rendered with:', { subject, group, dataType, year, semester, token });
+        debug('[SubjectFiles] Rendered with:', { subject, group, dataType, year, semester, token });
         if (!subject || !year || !semester) {
-          console.warn('[SubjectFiles] Not rendering/fetching because missing prop:', { subject, year, semester });
+          warn('[SubjectFiles] Not rendering/fetching because missing prop:', { subject, year, semester });
         }
         const [files, setFiles] = useState([]);
         const [loading, setLoading] = useState(false);
@@ -421,8 +421,8 @@
           e.preventDefault();
           setError(null);
           setSuccess(null);
-          console.log('[File Upload] User:', user);
-          console.log('[File Upload] Token:', token);
+          debug('[File Upload] User:', user);
+          debug('[File Upload] Token:', token);
           if (!newFile) return setError('Please select a file');
           if (newFile.type.startsWith('video/')) {
             setError('Video files are not allowed.');

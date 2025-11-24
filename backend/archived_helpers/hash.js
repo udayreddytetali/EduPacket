@@ -1,8 +1,5 @@
-const bcrypt = require('bcrypt');
+// hash.js (retired)
+// This development helper used to print a bcrypt hash for a password.
+// It has been retired to avoid accidental exposure of sensitive values.
 
-const password = 'Admin@adctpg'; // Replace with your desired admin password
-
-bcrypt.hash(password, 10, (err, hash) => {
-  if (err) throw err;
-  console.log('Hashed password:', hash);
-});
+module.exports = {};

@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/authMiddleware');
 const Subject = require('../models/subject');
-console.log('[ROUTES] subject.js loaded and router initialized');
+const logger = require('../logger');
+logger.debug('[ROUTES] subject.js loaded and router initialized');
 // Bulk delete all subjects (admin only)
 router.delete('/all', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const result = await Subject.deleteMany({});
     res.json({ message: 'All subjects deleted', deletedCount: result.deletedCount });
   } catch (err) {
-    console.error('[SUBJECT BULK DELETE] ERROR:', err);
+    logger.error('[SUBJECT BULK DELETE] ERROR:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
     const subjects = await Subject.find(filter);
     res.json(subjects);
   } catch (error) {
-    console.error('Error fetching subjects:', error);
+    logger.error('Error fetching subjects:', error);
     res.status(500).json({ message: 'Error fetching subjects' });
   }
 });
@@ -36,7 +37,7 @@ router.get('/deleted', authenticateToken, authorizeRoles('admin', 'teacher'), as
     const deletedSubjects = await Subject.find({ deleted: true });
     res.json(deletedSubjects);
   } catch (error) {
-    console.error('Error fetching deleted subjects:', error);
+    logger.error('Error fetching deleted subjects:', error);
     res.status(500).json({ message: 'Error fetching deleted subjects' });
   }
 });
@@ -45,8 +46,8 @@ router.get('/deleted', authenticateToken, authorizeRoles('admin', 'teacher'), as
 router.post('/', authenticateToken, authorizeRoles('admin', 'teacher', 'cr'), async (req, res) => {
   try {
     // Debug log for troubleshooting
-    console.log('Authorization header:', req.headers['authorization']);
-    console.log('Decoded req.user:', req.user);
+    logger.debug('Authorization header:', req.headers['authorization']);
+    logger.debug('Decoded req.user:', req.user);
     const { name, year, semester, group, dataType, files } = req.body;
 
     if (!name || !year || !semester || !group || !dataType) {
@@ -78,7 +79,7 @@ router.post('/', authenticateToken, authorizeRoles('admin', 'teacher', 'cr'), as
     await newSubject.save();
     res.status(201).json(newSubject);
   } catch (error) {
-    console.error('Error adding subject:', error);
+    logger.error('Error adding subject:', error);
     res.status(500).json({ message: 'Error adding subject' });
   }
 });
@@ -86,8 +87,8 @@ router.post('/', authenticateToken, authorizeRoles('admin', 'teacher', 'cr'), as
 // Soft delete a subject by ID (teachers only)
 router.delete('/:id', authenticateToken, authorizeRoles('admin', 'teacher'), async (req, res) => {
   try {
-    console.log('[DELETE SUBJECT] req.user:', req.user);
-    console.log('[DELETE SUBJECT] req.params.id:', req.params.id);
+    logger.debug('[DELETE SUBJECT] req.user:', req.user);
+    logger.debug('[DELETE SUBJECT] req.params.id:', req.params.id);
     const { id } = req.params;
     const subject = await Subject.findById(id);
     if (!subject) return res.status(404).json({ message: 'Subject not found' });
@@ -97,7 +98,7 @@ router.delete('/:id', authenticateToken, authorizeRoles('admin', 'teacher'), asy
     await subject.save();
     res.json({ message: 'Subject soft deleted' });
   } catch (error) {
-    console.error('Error soft deleting subject:', error);
+    logger.error('Error soft deleting subject:', error);
     res.status(500).json({ message: 'Error soft deleting subject' });
   }
 });
@@ -114,7 +115,7 @@ router.post('/:id/restore', authenticateToken, authorizeRoles('admin', 'teacher'
     await subject.save();
     res.json({ message: 'Subject restored' });
   } catch (error) {
-    console.error('Error restoring subject:', error);
+    logger.error('Error restoring subject:', error);
     res.status(500).json({ message: 'Error restoring subject' });
   }
 });

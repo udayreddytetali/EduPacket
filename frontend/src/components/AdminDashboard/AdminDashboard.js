@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { axios } from "../../api"; // Named export from api.js
 import { AuthContext } from "../../contexts/Authcontext";
+import { error } from '../../utils/logger';
 
 function AdminDashboard() {
   const { token, user } = useContext(AuthContext);
@@ -24,7 +25,7 @@ function AdminDashboard() {
         if (isMounted) setPending(res.data);
       })
       .catch((err) => {
-        console.error("Error fetching pending users:", err.response || err.message);
+        error("Error fetching pending users:", err.response || err.message);
         if (isMounted) setError("Failed to fetch pending users");
       })
       .finally(() => isMounted && setLoading(false));

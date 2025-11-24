@@ -10,9 +10,14 @@ const API_BASE = process.env.REACT_APP_API_URL || (typeof window !== 'undefined'
 // Configure default axios base URL so existing axios calls with '/api/...' work
 axios.defaults.baseURL = API_BASE;
 
-// Expose for fetch callers that still use fetch()
-if (typeof window !== 'undefined') window.REACT_APP_API_URL = API_BASE;
-// Expose axios on window for quick debugging in the browser console
-if (typeof window !== 'undefined') window.axios = axios;
+// Expose for fetch callers that still use fetch() and expose axios for debugging
+if (typeof window !== 'undefined') {
+	// Always expose the runtime API base for non-production (helps local dev)
+	if (process.env.NODE_ENV !== 'production') {
+		window.REACT_APP_API_URL = API_BASE;
+		// Expose axios on window for quick debugging in development only
+		window.axios = axios;
+	}
+}
 
 export { axios, API_BASE };

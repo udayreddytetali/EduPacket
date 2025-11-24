@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const logger = require('../logger');
 
 const signup = async (req, res) => {
   try {
@@ -36,7 +37,7 @@ const signup = async (req, res) => {
       message: `User created successfully.${approvalMsg}`
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -78,7 +79,7 @@ const login = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 };

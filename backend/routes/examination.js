@@ -3,20 +3,21 @@ const router = express.Router();
 const { authenticateToken, authorizeRoles } = require('../middleware/authMiddleware');
 const parser = require('../upload');
 const Pdf = require('../models/Pdf');
+const logger = require('../logger');
 
 // Upload examination notification PDF
 router.post('/upload', authenticateToken, authorizeRoles('admin', 'teacher', 'cr'), parser.single('file'), async (req, res) => {
   try {
-    console.log('[UPLOAD] Request body:', req.body);
-    console.log('[UPLOAD] Request body:', req.body);
-    console.log('[UPLOAD] Request file:', req.file);
+    logger.debug('[UPLOAD] Request body:', req.body);
+    logger.debug('[UPLOAD] Request body:', req.body);
+    logger.debug('[UPLOAD] Request file:', req.file);
     const { title, link } = req.body;
     let fileUrl = null;
     if (req.file) {
       fileUrl = req.file.secure_url || req.file.url || req.file.path;
     }
     if (!fileUrl && !link) {
-      console.error('[UPLOAD] No file or link provided');
+      logger.error('[UPLOAD] No file or link provided');
       return res.status(400).json({ message: 'Either a file or a link is required.' });
     }
     const newPdf = new Pdf({
@@ -28,16 +29,16 @@ router.post('/upload', authenticateToken, authorizeRoles('admin', 'teacher', 'cr
       type: 'examination', // ensure type is set
       classGroup: 'all', // default for notifications
     });
-    try {
+      try {
       await newPdf.save();
-      console.log('[UPLOAD] Saved document:', newPdf);
+      logger.debug('[UPLOAD] Saved document:', newPdf);
       res.status(201).json({ message: 'Examination notification uploaded', pdf: newPdf });
     } catch (saveErr) {
-      console.error('[UPLOAD] Error saving document:', saveErr);
+      logger.error('[UPLOAD] Error saving document:', saveErr);
       res.status(500).json({ message: 'Error saving notification', error: saveErr });
     }
   } catch (err) {
-    console.error('[UPLOAD ERROR]', err);
+    logger.error('[UPLOAD ERROR]', err);
     res.status(500).json({ message: err.message || 'Server error', error: err });
   }
 });
@@ -45,16 +46,16 @@ router.post('/upload', authenticateToken, authorizeRoles('admin', 'teacher', 'cr
 // Get all examination notifications
 router.get('/', async (req, res) => {
   try {
-    console.log('[GET /api/examination] Querying for examination notifications...');
+    logger.debug('[GET /api/examination] Querying for examination notifications...');
   const pdfs = await Pdf.find({ type: 'examination', deleted: false }).sort({ createdAt: -1 });
     if (pdfs.length === 0) {
-      console.log('[GET /api/examination] No documents found.');
+      logger.debug('[GET /api/examination] No documents found.');
     } else {
-      console.log('[GET /api/examination] Returned documents:', pdfs);
+      logger.debug('[GET /api/examination] Returned documents:', pdfs);
     }
     res.json(pdfs);
   } catch (err) {
-    console.error('[GET /api/examination] Error:', err);
+    logger.error('[GET /api/examination] Error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });

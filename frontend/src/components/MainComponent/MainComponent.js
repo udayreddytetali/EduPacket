@@ -121,7 +121,6 @@ const MainComponent = () => {
         </div>
 
         <div className="content-remaining-area">
-          {console.log('[MainComponent] Rendering SubjectSelection with:', { selectedGroup, selectedDataType, selectedYear, selectedSemester })}
           <SubjectSelection
             group={selectedGroup}
             dataType={selectedDataType}

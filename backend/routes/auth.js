@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { signup, login } = require('../controllers/authController');
+const logger = require('../logger');
 
 router.get('/ping', (req, res) => {
   res.send('Auth route is working');
@@ -9,5 +10,5 @@ router.get('/ping', (req, res) => {
 router.post('/signup', signup);
 router.post('/login', login);
 
-console.log('Auth routes loaded');
+logger.debug('Auth routes loaded');
 module.exports = router;
