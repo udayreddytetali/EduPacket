@@ -4,10 +4,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "r
 import Header from "./components/Header/Header";
 import MainComponent from "./components/MainComponent/MainComponent";
 import Footer from "./components/Footer/Footer";
-import Placeholder from "./components/Placeholder/Placeholder";
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
-import AdminDashboard, { PendingUserApprovals } from "./components/AdminDashboard/AdminDashboard";
+import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
+
 import RestoreDeleted from "./components/RestoreDeleted/RestoreDeleted";
 import NotificationsPage from "./pages/NotificationsPage";
 import { AuthContext, AuthProvider } from "./contexts/Authcontext"; // Your auth context
