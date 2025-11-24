@@ -11,7 +11,13 @@ app.use((req, res, next) => {
 });
 
 // Middleware
-app.use(cors());
+// Read allowed frontend origin from env so production can set the Vercel URL.
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://edu-packet.vercel.app';
+app.use(cors({
+  origin: FRONTEND_URL,
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
 app.use(express.json()); // To parse JSON request bodies
 
 // Connect to MongoDB
