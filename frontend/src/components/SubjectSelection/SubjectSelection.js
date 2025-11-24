@@ -14,9 +14,9 @@
         const handleRemoveSubjectConfirm = async (e) => {
           e.preventDefault();
           setSubjectError(null);
-          devLog('[Remove Subject] Stage 1: Form submitted');
+          debug('[Remove Subject] Stage 1: Form submitted');
           if (!removeSubjectName) {
-            devLog('[Remove Subject] Stage 2: No subject selected');
+            debug('[Remove Subject] Stage 2: No subject selected');
             return;
           }
           setLoading(true);
