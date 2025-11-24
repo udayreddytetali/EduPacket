@@ -22,8 +22,14 @@ function PendingUserApprovals() {
       .get(`${API_BASE}/api/admin/pending-users`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((resp) => setPending(resp.data))
-      .catch(() => setError("Failed to fetch pending users"))
+      .then((resp) => {
+        console.log("ADMIN API RESPONSE =", resp.data);  // ✅ IMPORTANT LOG
+        setPending(resp.data);
+      })
+      .catch((err) => {
+        console.log("ADMIN API ERROR =", err.response?.data); // 🔥 LOG ERROR TOO
+        setError("Failed to fetch pending users");
+      })
       .finally(() => setLoading(false));
   }, [token]);
 
