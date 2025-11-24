@@ -11,5 +11,5 @@ const subjectSchema = new mongoose.Schema({
   deleted: { type: Boolean, default: false },
   deletedAt: { type: Date, default: null },
 });
-
+ 
 module.exports = mongoose.model('Subject', subjectSchema);
