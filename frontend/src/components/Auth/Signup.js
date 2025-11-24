@@ -38,7 +38,7 @@ const Signup = () => {
     }
 
     try {
-      await axios.post('/api/auth/signup', {
+      await axios.post('{API_BASE}/api/auth/signup', {
         name,
         email,
         password,
