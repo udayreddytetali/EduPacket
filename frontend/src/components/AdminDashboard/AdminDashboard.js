@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { axios } from '../../api';
 import { AuthContext } from '../../contexts/Authcontext';
 
-const API_BASE = process.env.REACT_APP_API_BASE;
+// use centralized axios which has baseURL configured in frontend/src/api.js
 
 function AdminDashboard({ showPendingOnly = false }) {
   const { token, user } = useContext(AuthContext);
@@ -21,17 +21,17 @@ function AdminDashboard({ showPendingOnly = false }) {
     setLoading(true);
     setError(null);
 
-    const url = showPendingOnly ? `${API_BASE}/api/admin/pending-users` : null;
+    const url = showPendingOnly ? `/api/admin/pending-users` : null;
 
     if (url) {
       axios
-        .get(url, { headers: { Authorization: `Bearer ${token}` } })
+        .get(url)
         .then((resp) => {
           console.log("ADMIN API RESPONSE =", resp.data);
           setPending(resp.data);
         })
         .catch((err) => {
-          console.log("ADMIN API ERROR =", err.response?.data);
+          console.log("ADMIN API ERROR =", err.response?.data || err.message);
           setError("Failed to fetch pending users");
         })
         .finally(() => setLoading(false));
@@ -42,13 +42,10 @@ function AdminDashboard({ showPendingOnly = false }) {
     setLoading(true);
     setError(null);
 
-    const endpoint =
-      action === "approve"
-        ? `${API_BASE}/api/admin/approve-user`
-        : `${API_BASE}/api/admin/reject-user`;
+    const endpoint = action === 'approve' ? '/api/admin/approve-user' : '/api/admin/reject-user';
 
     axios
-      .post(endpoint, { userId }, { headers: { Authorization: `Bearer ${token}` } })
+      .post(endpoint, { userId })
       .then(() => setPending((prev) => prev.filter((u) => u._id !== userId)))
       .catch(() => setError(`Failed to ${action} user`))
       .finally(() => setLoading(false));

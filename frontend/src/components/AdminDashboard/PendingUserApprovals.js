@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import { axios } from '../../api';
 import { AuthContext } from '../../contexts/Authcontext';
-
-const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function PendingUserApprovals() {
   const { token } = useContext(AuthContext);
@@ -17,9 +15,7 @@ export default function PendingUserApprovals() {
     setError(null);
 
     axios
-      .get(`${API_BASE}/api/admin/pending-users`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(`/api/admin/pending-users`)
       .then((resp) => {
         console.log("ADMIN REQUEST PAGE RESPONSE =", resp.data);
         setPending(resp.data);
@@ -35,17 +31,10 @@ export default function PendingUserApprovals() {
     setLoading(true);
     setError(null);
 
-    const endpoint =
-      action === "approve"
-        ? `${API_BASE}/api/admin/approve-user`
-        : `${API_BASE}/api/admin/reject-user`;
+    const endpoint = action === "approve" ? "/api/admin/approve-user" : "/api/admin/reject-user";
 
     axios
-      .post(
-        endpoint,
-        { userId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      .post(endpoint, { userId })
       .then(() => setPending((p) => p.filter((u) => u._id !== userId)))
       .catch(() => setError(`Failed to ${action} user`))
       .finally(() => setLoading(false));
