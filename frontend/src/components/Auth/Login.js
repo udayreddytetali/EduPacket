@@ -1,9 +1,12 @@
 
+
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from '../../contexts/Authcontext';
 import styles from "./Auth.module.css";
+
+const API_BASE = process.env.REACT_APP_API_URL;
 
 
 const Login = ({ hasBackToMain }) => {
@@ -18,7 +21,7 @@ const Login = ({ hasBackToMain }) => {
     e.preventDefault();
     setError("");
     try {
-      const res = await axios.post("/api/auth/login", { email, password });
+      const res = await axios.post(`${API_BASE}/api/auth/login`, { email, password });
       login(res.data.token, res.data.user);
       if (res.data.user.role === "admin") {
         navigate("/admin/1st-Year/1st-Sem");
