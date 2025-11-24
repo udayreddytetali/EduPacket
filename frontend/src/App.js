@@ -43,6 +43,7 @@ function RoleRedirect() {
 function AppContent() {
   const location = useLocation();
 
+  // Paths on which footer should be hidden
   const hideFooterPaths = ["/login", "/signup", "/admin", "/admin/requests"];
   const isFooterHidden = hideFooterPaths.includes(location.pathname);
 
@@ -84,7 +85,7 @@ function AppContent() {
         <Route path="/login" element={<Login hasBackToMain />} />
         <Route path="/signup" element={<Signup hasBackToMain />} />
 
-        {/* FIXED: Pending user approvals uses AdminDashboard itself */}
+        {/* Pending user approvals (admin only) */}
         <Route
           path="/admin/requests"
           element={
@@ -116,6 +117,7 @@ function AppContent() {
         />
         <Route path="/teacher/restore-deleted" element={<RestoreDeleted />} />
 
+        {/* Fallback */}
         <Route path="*" element={<RoleRedirect />} />
       </Routes>
 
