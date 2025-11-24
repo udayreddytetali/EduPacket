@@ -99,8 +99,18 @@ button.footer-link {
   padding-left: 1rem;
 }
 .notification-preview{
-    padding-top: 0.5rem;
-    border-top: 1px solid #000000;
+  /* Card layout used for Examination/Circulars/Jobs previews */
+  width: 100%;
+  max-width: 600px;
+  margin: 0px auto;
+  padding: 0px 8px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  height: 55vh;
+  overflow-y: auto;
+  background: rgb(255, 255, 255);
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 2px 12px;
 }
 /* If you want a hover effect for notification links */
 .notification-link:hover {
@@ -161,8 +171,11 @@ button.footer-link {
     padding: 0.6rem 0.9rem;
   }
   .notification-preview {
+    /* Mobile: keep the same card feel but reduce margins and height */
+    height: 50vh;
     max-width: 95vw;
-    padding: 1rem 1rem;
+    margin: 12px;
+    padding: 12px 12px 0px;
   }
 }
 
