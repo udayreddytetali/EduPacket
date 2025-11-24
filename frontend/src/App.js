@@ -51,12 +51,15 @@ function AppContent() {
     <>
       <Header />
       <Routes>
-        {/* Admin dashboard */}
+        {/* Admin dashboard: show admin controls plus the MainComponent (subjects UI) */}
         <Route
           path="/admin/:year/:semester/:group?/:dataType?"
           element={
             <AdminRoute>
-              <AdminDashboard />
+              <>
+                <AdminDashboard />
+                <MainComponent />
+              </>
             </AdminRoute>
           }
         />
@@ -64,16 +67,19 @@ function AppContent() {
           path="/admin/dashboard"
           element={
             <AdminRoute>
-              <AdminDashboard />
+              <>
+                <AdminDashboard />
+                <MainComponent />
+              </>
             </AdminRoute>
           }
         />
 
-        {/* Teacher dashboard */}
-        <Route path="/teacher/:year/:semester/:group?/:dataType?" element={<AdminDashboard />} />
+        {/* Teacher dashboard (use MainComponent to show subjects for teachers) */}
+        <Route path="/teacher/:year/:semester/:group?/:dataType?" element={<MainComponent />} />
 
-        {/* CR dashboard */}
-        <Route path="/cr/:year/:semester/:group?/:dataType?" element={<AdminDashboard />} />
+        {/* CR dashboard (class reps also see the main subject view) */}
+        <Route path="/cr/:year/:semester/:group?/:dataType?" element={<MainComponent />} />
 
         {/* Main pages */}
         <Route path="/:year/:semester/:group?/:dataType?" element={<MainComponent />} />
