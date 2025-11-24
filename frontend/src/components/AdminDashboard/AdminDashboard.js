@@ -1,74 +1,52 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { axios } from '../../api';
-import { AuthContext } from '../../contexts/Authcontext';
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { axios } from "../../api"; // Named export from api.js
+import { AuthContext } from "../../contexts/Authcontext";
 
-// use centralized axios which has baseURL configured in frontend/src/api.js
-
-function AdminDashboard({ showPendingOnly = false }) {
+function AdminDashboard() {
   const { token, user } = useContext(AuthContext);
   const [pending, setPending] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch pending users when component mounts
   useEffect(() => {
-    if (!token) return;
+    if (!token || !user || user.role !== "admin") return;
 
     let isMounted = true;
-
-    // Only fetch pending users if showPendingOnly is true (for /admin/requests)
-    if (showPendingOnly && user.role !== "admin") return;
-
-    const url = showPendingOnly ? `/api/admin/pending-users` : null;
-
-    // Only enter loading state if we'll actually fetch
-    if (!url) {
-      // ensure we are not left in a loading state
-      setLoading(false);
-      setError(null);
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
-    if (url) {
-      axios
-        .get(url)
-        .then((resp) => {
-          console.log("ADMIN API RESPONSE =", resp.data);
-          if (isMounted) setPending(resp.data);
-        })
-        .catch((err) => {
-          console.log("ADMIN API ERROR =", err.response?.data || err.message);
-          if (isMounted) setError("Failed to fetch pending users");
-        })
-        .finally(() => {
-          if (isMounted) setLoading(false);
-        });
-    }
+    axios
+      .get("/api/admin/pending-users") // Authorization header already set via AuthContext
+      .then((res) => {
+        if (isMounted) setPending(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching pending users:", err.response || err.message);
+        if (isMounted) setError("Failed to fetch pending users");
+      })
+      .finally(() => isMounted && setLoading(false));
 
-    return () => {
-      isMounted = false;
-    };
-  }, [token, showPendingOnly, user]);
+    return () => { isMounted = false; };
+  }, [token, user]);
 
   const handleAction = (userId, action) => {
     setLoading(true);
     setError(null);
 
-    const endpoint = action === 'approve' ? '/api/admin/approve-user' : '/api/admin/reject-user';
+    const endpoint =
+      action === "approve" ? "/api/admin/approve-user" : "/api/admin/reject-user";
 
     axios
-      .post(endpoint, { userId })
+      .post(endpoint, { userId }) // Auth header already included
       .then(() => setPending((prev) => prev.filter((u) => u._id !== userId)))
       .catch(() => setError(`Failed to ${action} user`))
       .finally(() => setLoading(false));
   };
 
-  // Access control for Admin dashboard
-  if (!user || (showPendingOnly && user.role !== "admin")) {
+  if (!user || user.role !== "admin") {
     return (
       <div style={{ textAlign: "center", marginTop: 30, color: "red" }}>
         Access Denied: You are not authorized to view this page.
@@ -77,44 +55,24 @@ function AdminDashboard({ showPendingOnly = false }) {
   }
 
   return (
-    <div style={{ marginBottom: 40 }}>
-      {showPendingOnly && (
-        <h2
-          style={{
-            textAlign: "center",
-            marginBottom: 32,
-            color: "#205761",
-            fontWeight: 700,
-            letterSpacing: 1,
-          }}
-        >
-          Pending User Approvals
-        </h2>
-      )}
-
-      {showPendingOnly && (
-        <div style={{ margin: '12px auto', maxWidth: 900, padding: 12, background: '#fff8', borderRadius: 8 }}>
-          <strong style={{ display: 'block', marginBottom: 6 }}>Debug (pending users):</strong>
-          <div style={{ fontSize: 13, color: '#333' }}>loading: {String(loading)}</div>
-          <div style={{ fontSize: 13, color: '#333' }}>count: {pending?.length ?? 0}</div>
-          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: 12, marginTop: 8, background: '#f7f7f7', padding: 8, borderRadius: 6 }}> {JSON.stringify(pending, null, 2)}</pre>
-        </div>
-      )}
+    <div style={{ maxWidth: 900, margin: "20px auto", padding: 20 }}>
+      <h2 style={{ textAlign: "center", marginBottom: 32, color: "#205761" }}>
+        Pending User Approvals
+      </h2>
 
       {loading && <p style={{ textAlign: "center", color: "#205761" }}>Loading...</p>}
-      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+      {error && <p style={{ textAlign: "center", color: "red" }}>{error}</p>}
 
-      {showPendingOnly && pending.length === 0 && !loading && (
-        <p style={{ textAlign: "center", color: "#888" }}>There are no pending users.</p>
+      {pending.length === 0 && !loading && (
+        <p style={{ textAlign: "center", color: "#888" }}>No pending users.</p>
       )}
 
-      {showPendingOnly && pending.length > 0 && (
+      {pending.length > 0 && (
         <div style={{ overflowX: "auto" }}>
           <table
             style={{
               width: "100%",
-              borderCollapse: "separate",
-              borderSpacing: 0,
+              borderCollapse: "collapse",
               background: "#f9f9f9",
               borderRadius: 12,
               boxShadow: "0 2px 8px rgba(32,87,97,0.07)",
@@ -129,7 +87,6 @@ function AdminDashboard({ showPendingOnly = false }) {
                 <th style={styles.th}>Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {pending.map((usr) => (
                 <tr key={usr._id} style={{ borderBottom: "1px solid #e0e0e0", background: "#fff" }}>
@@ -138,10 +95,10 @@ function AdminDashboard({ showPendingOnly = false }) {
                   <td style={styles.td}>{usr.role}</td>
                   <td style={styles.td}>{new Date(usr.createdAt).toLocaleDateString()}</td>
                   <td style={styles.td}>
-                    <button onClick={() => handleAction(usr._id, "approve")} disabled={loading} style={styles.approveBtn}>
+                    <button onClick={() => handleAction(usr._id, "approve")} style={styles.approveBtn} disabled={loading}>
                       Approve
                     </button>
-                    <button onClick={() => handleAction(usr._id, "reject")} disabled={loading} style={styles.rejectBtn}>
+                    <button onClick={() => handleAction(usr._id, "reject")} style={styles.rejectBtn} disabled={loading}>
                       Reject
                     </button>
                   </td>
@@ -153,13 +110,7 @@ function AdminDashboard({ showPendingOnly = false }) {
       )}
 
       <button
-        onClick={() => {
-          let rolePath = "/admin";
-          if (user.role === "teacher") rolePath = "/teacher";
-          if (user.role === "cr") rolePath = "/cr";
-
-          navigate(`${rolePath}/1st-Year/1st-Sem`);
-        }}
+        onClick={() => navigate("/admin/1st-Year/1st-Sem")}
         style={styles.backBtn}
       >
         ← Back to Main Menu
@@ -169,51 +120,11 @@ function AdminDashboard({ showPendingOnly = false }) {
 }
 
 const styles = {
-  th: {
-    padding: "16px 0",
-    textAlign: "center",
-    fontWeight: 600,
-    color: "#205761",
-    fontSize: 18,
-  },
-  td: {
-    textAlign: "center",
-    padding: "14px 0",
-    fontSize: 16,
-  },
-  approveBtn: {
-    background: "#7ed957",
-    color: "#205761",
-    border: "none",
-    borderRadius: 6,
-    padding: "8px 18px",
-    fontWeight: 600,
-    marginRight: 10,
-    cursor: "pointer",
-  },
-  rejectBtn: {
-    background: "#ffe3e3",
-    color: "#b00020",
-    border: "none",
-    borderRadius: 6,
-    padding: "8px 18px",
-    fontWeight: 600,
-    cursor: "pointer",
-  },
-  backBtn: {
-    marginTop: 36,
-    background: "#205761",
-    color: "#fff",
-    border: "none",
-    borderRadius: 6,
-    padding: "10px 24px",
-    fontWeight: 600,
-    fontSize: 16,
-    cursor: "pointer",
-    display: "block",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
+  th: { padding: "16px 0", textAlign: "center", fontWeight: 600, color: "#205761", fontSize: 18 },
+  td: { textAlign: "center", padding: "14px 0", fontSize: 16 },
+  approveBtn: { background: "#7ed957", color: "#205761", border: "none", borderRadius: 6, padding: "8px 18px", fontWeight: 600, marginRight: 10, cursor: "pointer" },
+  rejectBtn: { background: "#ffe3e3", color: "#b00020", border: "none", borderRadius: 6, padding: "8px 18px", fontWeight: 600, cursor: "pointer" },
+  backBtn: { marginTop: 36, background: "#205761", color: "#fff", border: "none", borderRadius: 6, padding: "10px 24px", fontWeight: 600, fontSize: 16, cursor: "pointer", display: "block", marginLeft: "auto", marginRight: "auto" },
 };
 
 export default AdminDashboard;
