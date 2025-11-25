@@ -29,7 +29,7 @@ function NotificationsPage({ initialCategory = 'examinations' }) {
   };
 
   return (
-    <div style={{height:'55vh', maxWidth: "100%", margin: '20px', padding: '24px 24px 0 24px', background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+    <div style={{height:'55vh', maxWidth: "100%", margin: '20px', padding: '24px 24px 0 24px', background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)',overflowY: 'auto' }}>
       {showTabs && (
         <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
           {categories.map((cat) => (
