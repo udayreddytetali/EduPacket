@@ -106,7 +106,7 @@ function NotificationList({ category }) {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: 600, margin: '0 auto', padding: '0 8px', boxSizing: 'border-box', overflowX: 'auto' }}>
+    <div style={{ width: '100%', margin: '0 auto', padding: '0 8px', boxSizing: 'border-box', overflowX: 'auto' }}>
       {showHeading && (
         <div style={{ marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h2 style={{ textTransform: 'capitalize', margin: 0 }}>{headingLabel}</h2>
