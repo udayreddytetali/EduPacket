@@ -10,6 +10,9 @@ app.use((req, res, next) => {
   logger.debug(`[REQUEST] ${req.method} ${req.originalUrl}`);
   next();
 });
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 // Middleware
 // Read allowed frontend origin from env so production can set the Vercel URL.
