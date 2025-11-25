@@ -49,9 +49,9 @@ const Footer = () => {
           jobsRes.json(),
         ]);
         setRecentNotices({
-          examination: (examData || []).slice(-3).reverse(),
-          circulars: (circData || []).slice(-3).reverse(),
-          jobs: (jobsData || []).slice(-3).reverse(),
+          examination: (examData || []).slice(0, 3),
+          circulars: (circData || []).slice(0, 3),
+          jobs: (jobsData || []).slice(0, 3),
         });
       } catch (err) {
         setRecentNotices({ examination: [], circulars: [], jobs: [] });
